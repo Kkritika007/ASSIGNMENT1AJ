@@ -1,25 +1,22 @@
 package com.example.assignment1aj;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class RestaurantController implements Initializable {
 
     @FXML
-    private ComboBox<String> itemnameComboBox;
+    private TableView<Restaurant> tableView;
 
     @FXML
     private TableColumn<Restaurant, Integer> orderidColumn;
@@ -37,47 +34,98 @@ public class RestaurantController implements Initializable {
     private TableColumn<Restaurant, Double> priceColumn;
 
     @FXML
-    private Label itemLabel;
+    private ComboBox<String> itemnameComboBox;
 
     @FXML
     private CheckBox popularitemCheckBox;
 
     @FXML
-    private TableView<Restaurant> tableView;
+    private PieChart pieChart;
+
+    private List<Restaurant> currentData;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Fetch data from database
-        List<Restaurant> restaurants = DBUtility.getDataFromDB();
-
-        // Populate TableView
-        tableView.getItems().addAll(restaurants);
-
-        // Bind ComboBox items
-        ObservableList<String> itemnames = FXCollections.observableArrayList();
-        for (Restaurant restaurant : restaurants) {
-            String itemname = restaurant.getitemname();
-            if (!itemnames.contains(itemname)) {
-                itemnames.add(itemname);
-            }
-        }
-        itemnameComboBox.setItems(itemnames);
-
         // Initialize TableView columns
         orderidColumn.setCellValueFactory(new PropertyValueFactory<>("orderid"));
         itemnameColumn.setCellValueFactory(new PropertyValueFactory<>("itemname"));
         CustomernameColumn.setCellValueFactory(new PropertyValueFactory<>("Customername"));
         orderdayColumn.setCellValueFactory(new PropertyValueFactory<>("orderday"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        // Populate TableView with all data initially
+        currentData = DBUtility.getDataFromDB();
+        populateTableView(currentData);
+
+        // Populate ComboBox with unique item names
+        populateItemNameComboBox(currentData);
     }
 
     @FXML
     void itemcodeComboBox_OnClick(ActionEvent event) {
-        // Handle item code ComboBox action
+        String selecteditemName = itemnameComboBox.getValue();
+        if (selecteditemName != null && !selecteditemName.isEmpty()) {
+            List<Restaurant> filteredData = DBUtility.getDataFromDB();
+            populateTableView(filteredData);
+        }
     }
 
     @FXML
     void popularitemCheckBox_OnClick(ActionEvent event) {
-        // Handle popular item CheckBox action
+        if (popularitemCheckBox.isSelected()) {
+            String mostOrderedItem = findMostOrderedItem(currentData);
+            updateChartWithMostOrderedItem(mostOrderedItem);
+        } else {
+            // Clear the chart when the checkbox is deselected
+            pieChart.getData().clear();
+        }
+    }
+
+    private void populateTableView(List<Restaurant> data) {
+        tableView.getItems().clear();
+        tableView.getItems().addAll(data);
+    }
+
+    private void populateItemNameComboBox(List<Restaurant> data) {
+        Set<String> uniqueItemNames = new TreeSet<>();
+        for (Restaurant restaurant : data) {
+            uniqueItemNames.add(restaurant.getitemname());
+        }
+        itemnameComboBox.getItems().addAll(uniqueItemNames);
+    }
+
+    private String findMostOrderedItem(List<Restaurant> data) {
+        Map<String, Integer> itemCountMap = new HashMap<>();
+        for (Restaurant restaurant : data) {
+            String itemName = restaurant.getitemname();
+            itemCountMap.put(itemName, itemCountMap.getOrDefault(itemName, 0) + 1);
+        }
+        // Find the item with the maximum count
+        int maxCount = 0;
+        String mostOrderedItem = null;
+        for (Map.Entry<String, Integer> entry : itemCountMap.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostOrderedItem = entry.getKey();
+            }
+        }
+        return mostOrderedItem;
+    }
+
+    private void updateChartWithMostOrderedItem(String mostOrderedItem) {
+        pieChart.getData().clear();
+        if (mostOrderedItem != null) {
+            pieChart.getData().add(new PieChart.Data(mostOrderedItem, getCountOfItem(mostOrderedItem)));
+        }
+    }
+
+    private int getCountOfItem(String item) {
+        int count = 0;
+        for (Restaurant restaurant : currentData) {
+            if (restaurant.getitemname().equals(item)) {
+                count++;
+            }
+        }
+        return count;
     }
 }
