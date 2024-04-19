@@ -1,32 +1,40 @@
 package com.example.assignment1aj;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-public class RestaurantController {
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-    @FXML
-    private TableColumn<?, ?> categoryColumn;
-
-    @FXML
-    private ComboBox<?> itemcodeComboBox;
-
-    @FXML
-    private TableColumn<?, ?> priceColumn;
+public class RestaurantController implements Initializable {
 
     @FXML
-    private TableColumn<?, ?> orderidColumn;
+    private ComboBox<String> itemnameComboBox;
 
     @FXML
-    private TableColumn<?, ?> itemnameColumn;
+    private TableColumn<Restaurant, Integer> orderidColumn;
 
     @FXML
-    private TableColumn<?, ?> DescriptionColumn;
+    private TableColumn<Restaurant, String> itemnameColumn;
+
+    @FXML
+    private TableColumn<Restaurant, String> CustomernameColumn;
+
+    @FXML
+    private TableColumn<Restaurant, String> orderdayColumn;
+
+    @FXML
+    private TableColumn<Restaurant, Double> priceColumn;
 
     @FXML
     private Label itemLabel;
@@ -35,22 +43,41 @@ public class RestaurantController {
     private CheckBox popularitemCheckBox;
 
     @FXML
-    private TableColumn<?, ?> phoneColumn;
+    private TableView<Restaurant> tableView;
 
-    @FXML
-    private TableColumn<?, ?> quantityColumn;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Fetch data from database
+        List<Restaurant> restaurants = DBUtility.getDataFromDB();
 
-    @FXML
-    private TableView<?> tableView;
+        // Populate TableView
+        tableView.getItems().addAll(restaurants);
+
+        // Bind ComboBox items
+        ObservableList<String> itemNames = FXCollections.observableArrayList();
+        for (Restaurant restaurant : restaurants) {
+            String itemName = restaurant.getItemName();
+            if (!itemNames.contains(itemName)) {
+                itemNames.add(itemName);
+            }
+        }
+        itemnameComboBox.setItems(itemNames);
+
+        // Initialize TableView columns
+        orderidColumn.setCellValueFactory(new PropertyValueFactory<>("orderid"));
+        itemnameColumn.setCellValueFactory(new PropertyValueFactory<>("itemname"));
+        CustomernameColumn.setCellValueFactory(new PropertyValueFactory<>("Customername"));
+        orderdayColumn.setCellValueFactory(new PropertyValueFactory<>("orderday"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+    }
 
     @FXML
     void itemcodeComboBox_OnClick(ActionEvent event) {
-
+        // Handle item code ComboBox action
     }
 
     @FXML
     void popularitemCheckBox_OnClick(ActionEvent event) {
-
+        // Handle popular item CheckBox action
     }
-
 }
