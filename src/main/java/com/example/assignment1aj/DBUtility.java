@@ -31,12 +31,12 @@ public class DBUtility {
 
                     try {
                         while (rs.next()) {
-                            int orderId = rs.getInt("orderid");
-                            String itemName = rs.getString("itemname");
-                            String Customername = rs.getString("Customer name");
-                            String orderday = rs.getString("order day");
+                            int orderid = rs.getInt("orderid");
+                            String itemname = rs.getString("itemname");
+                            String Customername = rs.getString("Customername");
+                            String orderday = rs.getString("orderday");
                             double price = rs.getDouble("price");
-                            Restaurant restaurant = new Restaurant(orderId, itemName, Customername, orderday , price);
+                            Restaurant restaurant = new Restaurant(orderid, itemname, Customername, orderday , price);
                             restaurants.add(restaurant);
                         }
                     } catch (Throwable var16) {

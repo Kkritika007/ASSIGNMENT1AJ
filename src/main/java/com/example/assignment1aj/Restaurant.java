@@ -5,14 +5,14 @@ import javafx.beans.property.*;
 public class Restaurant {
     private final IntegerProperty orderid;
     private StringProperty itemname;
-    public final StringProperty Customername;
+    public StringProperty Customername;
     private final StringProperty orderday;
     private DoubleProperty price;
 
-    public Restaurant(int orderId, String itemName, String customerName, String orderDay, double price) {
-        this.orderid = new SimpleIntegerProperty(orderId);
-        this.itemname = new SimpleStringProperty(itemName);
-        this.Customername = new SimpleStringProperty(customerName);
+    public Restaurant(int orderid, String itemname, String Customername, String orderDay, double price) {
+        this.orderid = new SimpleIntegerProperty(orderid);
+        this.itemname = new SimpleStringProperty(itemname);
+        this.Customername = new SimpleStringProperty(Customername);
         this.orderday = new SimpleStringProperty(orderDay);
         this.price = new SimpleDoubleProperty(price);
     }
@@ -24,11 +24,11 @@ public class Restaurant {
     }
 
     // Getter methods for JavaFX properties
-    public IntegerProperty orderIdProperty() {
+    public IntegerProperty orderidProperty() {
         return orderid;
     }
 
-    public StringProperty itemNameProperty() {
+    public StringProperty itemnameProperty() {
         return itemname;
     }
 
@@ -36,7 +36,7 @@ public class Restaurant {
         return Customername;
     }
 
-    public StringProperty orderDayProperty() {
+    public StringProperty orderdayProperty() {
         return orderday;
     }
 
@@ -45,11 +45,11 @@ public class Restaurant {
     }
 
     // Getter methods for non-JavaFX properties
-    public int getOrderId() {
+    public int getorderid() {
         return orderid.get();
     }
 
-    public String getItemName() {
+    public String getitemname() {
         return itemname.get();
     }
 
@@ -57,11 +57,11 @@ public class Restaurant {
         return Customername.get();
     }
 
-    public String getOrderDay() {
+    public String getorderday() {
         return orderday.get();
     }
 
-    public double getPrice() {
+    public double getprice() {
         return price.get();
     }
 }

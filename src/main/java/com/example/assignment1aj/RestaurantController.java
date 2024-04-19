@@ -56,9 +56,9 @@ public class RestaurantController implements Initializable {
         // Bind ComboBox items
         ObservableList<String> itemNames = FXCollections.observableArrayList();
         for (Restaurant restaurant : restaurants) {
-            String itemName = restaurant.getItemName();
-            if (!itemNames.contains(itemName)) {
-                itemNames.add(itemName);
+            String itemname = restaurant.getitemname();
+            if (!itemNames.contains(itemname)) {
+                itemNames.add(itemname);
             }
         }
         itemnameComboBox.setItems(itemNames);
