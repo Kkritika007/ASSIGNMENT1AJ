@@ -54,14 +54,14 @@ public class RestaurantController implements Initializable {
         tableView.getItems().addAll(restaurants);
 
         // Bind ComboBox items
-        ObservableList<String> itemNames = FXCollections.observableArrayList();
+        ObservableList<String> itemnames = FXCollections.observableArrayList();
         for (Restaurant restaurant : restaurants) {
             String itemname = restaurant.getitemname();
-            if (!itemNames.contains(itemname)) {
-                itemNames.add(itemname);
+            if (!itemnames.contains(itemname)) {
+                itemnames.add(itemname);
             }
         }
-        itemnameComboBox.setItems(itemNames);
+        itemnameComboBox.setItems(itemnames);
 
         // Initialize TableView columns
         orderidColumn.setCellValueFactory(new PropertyValueFactory<>("orderid"));
