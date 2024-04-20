@@ -1,5 +1,7 @@
 package com.example.assignment1aj;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,7 +27,7 @@ public class RestaurantController implements Initializable {
     private TableColumn<Restaurant, String> itemnameColumn;
 
     @FXML
-    private TableColumn<Restaurant, String> CustomernameColumn;
+    private TableColumn<Restaurant, String> customerNameColumn;
 
     @FXML
     private TableColumn<Restaurant, String> orderdayColumn;
@@ -49,7 +51,7 @@ public class RestaurantController implements Initializable {
         // Initialize TableView columns
         orderidColumn.setCellValueFactory(new PropertyValueFactory<>("orderid"));
         itemnameColumn.setCellValueFactory(new PropertyValueFactory<>("itemname"));
-        CustomernameColumn.setCellValueFactory(new PropertyValueFactory<>("Customername"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         orderdayColumn.setCellValueFactory(new PropertyValueFactory<>("orderday"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
@@ -65,7 +67,7 @@ public class RestaurantController implements Initializable {
     void itemcodeComboBox_OnClick(ActionEvent event) {
         String selecteditemName = itemnameComboBox.getValue();
         if (selecteditemName != null && !selecteditemName.isEmpty()) {
-            List<Restaurant> filteredData = DBUtility.getDataFromDB();
+            List<Restaurant> filteredData = filterDataByItemName(selecteditemName);
             populateTableView(filteredData);
         }
     }
@@ -94,6 +96,16 @@ public class RestaurantController implements Initializable {
         itemnameComboBox.getItems().addAll(uniqueItemNames);
     }
 
+    private List<Restaurant> filterDataByItemName(String itemName) {
+        List<Restaurant> filteredData = new ArrayList<>();
+        for (Restaurant restaurant : currentData) {
+            if (restaurant.getitemname().equals(itemName)) {
+                filteredData.add(restaurant);
+            }
+        }
+        return filteredData;
+    }
+
     private String findMostOrderedItem(List<Restaurant> data) {
         Map<String, Integer> itemCountMap = new HashMap<>();
         for (Restaurant restaurant : data) {
@@ -115,7 +127,9 @@ public class RestaurantController implements Initializable {
     private void updateChartWithMostOrderedItem(String mostOrderedItem) {
         pieChart.getData().clear();
         if (mostOrderedItem != null) {
-            pieChart.getData().add(new PieChart.Data(mostOrderedItem, getCountOfItem(mostOrderedItem)));
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+            pieChartData.add(new PieChart.Data(mostOrderedItem, getCountOfItem(mostOrderedItem)));
+            pieChart.setData(pieChartData);
         }
     }
 

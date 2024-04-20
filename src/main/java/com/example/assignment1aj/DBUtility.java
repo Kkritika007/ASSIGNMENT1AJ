@@ -18,7 +18,7 @@ public class DBUtility {
 
     public static List<Restaurant> getDataFromDB() {
         List<Restaurant> restaurants = new ArrayList<>();
-        String sql = "SELECT * FROM restaurant_orders;";
+        String sql = "SELECT * FROM restaurant_orders";
 
         try {
             Connection conn = DriverManager.getConnection(url, userName, pass);
