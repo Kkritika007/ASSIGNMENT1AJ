@@ -5,3 +5,39 @@
 #titleLabel{
     -fx-font-size: 20px;
 }
+/* Apply styles to TableView */
+#tableView {
+    -fx-background-color: #ffffff; /* Background color */
+}
+
+/* Apply styles to TableColumn headers */
+#orderidColumn, #itemnameColumn, #customerNameColumn, #orderdayColumn, #priceColumn {
+    -fx-font-size: 14px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-text-fill: #333333; /* Text color */
+}
+
+/* Apply styles to CheckBox */
+#popularitemCheckBox {
+    -fx-font-size: 14px; /* Font size */
+    -fx-text-fill: #333333; /* Text color */
+}
+
+/* Apply styles to ComboBox */
+#itemnameComboBox {
+    -fx-font-size: 14px; /* Font size */
+    -fx-background-color: #ffffff; /* Background color */
+    -fx-text-fill: #333333; /* Text color */
+}
+
+/* Apply styles to Label */
+#titleLabel, #itemLabel {
+    -fx-font-size: 16px; /* Font size */
+    -fx-text-fill: #ffffff; /* Text color */
+}
+
+/* Apply styles to PieChart */
+#pieChart {
+    -fx-pie-label-visible: false; /* Hide pie chart labels */
+    -fx-background-color: #ffffff; /* Background color */
+}
